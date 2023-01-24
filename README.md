@@ -6,11 +6,11 @@ This API implements the following routes:
 |-----------------	|----------------  	|---------------	|---------------------------------------------------|
 | `/convert`     	| POST           	| CREATE        	| Calculate converted amount and mid-market rate    |
 | `/history`     	| GET           	| READ        	    | List all previously made convertions              |
-| `/currencies`     | GET           	| READ        	    | List all supported currencies              |
+| `/currencies`     | GET           	| READ        	    | List all supported currencies                     |
 
 
 ## Build and Run
-To buld and run. This will also run migrations automatically.  
+To build and run. This will also run migrations automatically.  
 
 ```bash
 $ docker-compose build
