@@ -3,7 +3,7 @@ import json
 
 from bs4 import BeautifulSoup
 import aiohttp
-from arsenic import get_session, browsers, services, keys
+from arsenic import get_session, browsers, services
 
 from mid_market_rates.config import settings
 
