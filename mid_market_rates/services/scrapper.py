@@ -3,7 +3,6 @@ import json
 
 from bs4 import BeautifulSoup
 import aiohttp
-from arsenic import get_session, browsers, services
 
 from mid_market_rates.config import settings
 
@@ -11,32 +10,16 @@ logger = logging.getLogger(__name__)
 
 
 class Scrapper:
-    @staticmethod
-    def set_up_service_and_browser():
-        service = services.Chromedriver(binary=settings.CHROME_DRIVER_URL)
-        browser = browsers.Chrome()
-        browser.capabilities = {
-            "goog:chromeOptions": {
-                "args": [
-                    "--headless",
-                    "--disable-gpu",
-                    "--no-sandbox",
-                    "--disable-dev-shm-usage",
-                ]
-            }
-        }
-        return service, browser
-
+ 
     @staticmethod
     async def scrape_rate(url, amount, from_currency, to_currency):
-        service, browser = Scrapper.set_up_service_and_browser()
-        async with get_session(service, browser) as session:
+        async with aiohttp.ClientSession() as session:
             url = f"{url}{from_currency.lower()}-to-{to_currency.lower()}-rate?amount={amount}"
-            await session.get(url)
-            converted = await session.get_element("#target-input")
-            value = await converted.get_attribute("value")
-            return value
-
+            async with session.get(url) as resp:
+                response = await resp.read()
+            converted = BeautifulSoup(response.decode('utf-8'), 'html.parser').find('label', attrs={'for': "target-input"}).findNext('div').text
+            return float(converted[0: converted.find(' ')].replace(',', '') ) #strip currency code 
+    
     @staticmethod
     async def scrape_currencies(url):
         async with aiohttp.ClientSession() as session:
