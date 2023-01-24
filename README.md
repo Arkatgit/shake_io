@@ -66,3 +66,4 @@ figure out how how rapidly the rates changes over time.
 ## Things to Improve
 
 1. Optimize convert endpoint by researching mid market rate volatiliy parterns and incorporating it in the implementation
+2. Improve logging 
