@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  mid-market-rate:
+    container_name: 'mid-market-rate'
+    build: ./
+    command: sh -c 'alembic upgrade head && uvicorn main:app --reload --host 0.0.0.0 --port 8000'
+    volumes:  
+      - ./:/code/
+    ports:
+      - 8000:8000
+    environment:
+     - DB_HOST=database
+     - DB_USER=postgress
+     - DB_PASSWORD=food
+     - DB_NAME=mid_market_rate
+     - CHROME_DRIVER_URL=/usr/bin/chromedriver
+     - CURRENCY_CONVERTER_URL=https://wise.com/gb/currency-converter/
+     - API_KEY=004cec70-142d-4535-961b-4919a5d58ad3
+    depends_on:
+      - database
+
+  database:
+    image: postgres:14-alpine
+    environment:
+     - POSTGRES_USER=postgress
+     - POSTGRES_PASSWORD=food
+     - POSTGRES_DB=mid_market_rate
+    ports:
+    - "5432:5432"
